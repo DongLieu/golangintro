@@ -1,45 +1,37 @@
 package blockchain
 
-import (
-	"bytes"
-	"crypto/sha256"
-)
+type BlockChain struct {
+	Blocks []*Block
+}
 
 type Block struct {
 	Hash     []byte
 	Data     []byte
 	PrevHash []byte
+	Nonce    int
 }
 
-type BlockChain struct {
-	blocks []*Block
-}
+func CreateBlock(data string, prevHash []byte) *Block {
+	block := &Block{[]byte{}, []byte(data), prevHash, 0}
+	pow := NewProof(block)
+	nonce, hash := pow.Run()
 
-func (block *Block) BamHash() {
-	giatriBam := bytes.Join([][]byte{block.Data, block.PrevHash}, []byte{})
-	hash := sha256.Sum256(giatriBam)
 	block.Hash = hash[:]
+	block.Nonce = nonce
 
+	return block
 }
 
-func CreateBlock(data string, PrevHash []byte) *Block {
-	block := &Block{[]byte{}, []byte(data), PrevHash}
-	block.BamHash()
-	return block
+func (chain *BlockChain) AddBlock(data string) {
+	prevBlock := chain.Blocks[len(chain.Blocks)-1]
+	new := CreateBlock(data, prevBlock.Hash)
+	chain.Blocks = append(chain.Blocks, new)
 }
 
 func Genesis() *Block {
 	return CreateBlock("Genesis", []byte{})
 }
 
-func khoitaoBlockChain() *BlockChain {
+func InitBlockChain() *BlockChain {
 	return &BlockChain{[]*Block{Genesis()}}
-}
-func (chain *BlockChain) AddBlock(data string) {
-	prevBlock := chain.blocks[len(chain.blocks)-1]
-	block_new := CreateBlock(data, prevBlock.Hash)
-	chain.blocks = append(chain.blocks, block_new)
-}
-func SayHello() string {
-	return "Hi from package dir1"
 }
