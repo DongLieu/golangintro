@@ -30,7 +30,7 @@ const Difficulty = 18
 
 type ProofOfWork struct {
 	Block  *Block
-	Target *big.Int // so nguyen lon
+	Target *big.Int // so nguyen lon nhưng nhỏ hơn 000092242422... gọi là mốc taget
 }
 
 func NewProof(b *Block) *ProofOfWork {
