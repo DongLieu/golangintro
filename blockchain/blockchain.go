@@ -3,7 +3,7 @@ package blockchain
 import (
 	"fmt"
 
-	"github.com/DongLieu/golangintro/badger"
+	"github.com/dgraph-io/badger"
 )
 
 const (
