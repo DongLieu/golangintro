@@ -11,31 +11,26 @@ import (
 )
 
 // Take the data from the block
-// Lấy dữ liệu từ khối
 
 // create a counter (nonce) which starts at 0
-// tao bo dem bd tu 0
 
 // create a hash of the data plus the counter
-// tao mot ma bam cua du lieu dem
 
 // check the hash to see if it meets a set of requirements
-// kiem tra ma bam xem dap ung duoc yeu cau k
 
 // Requirements:
 // The First few bytes must contain 0s
-// vai bbytes dau phai = 0
 
 const Difficulty = 18
 
 type ProofOfWork struct {
 	Block  *Block
-	Target *big.Int // so nguyen lon nhưng nhỏ hơn 000092242422... gọi là mốc taget
+	Target *big.Int
 }
 
 func NewProof(b *Block) *ProofOfWork {
 	target := big.NewInt(1)
-	target.Lsh(target, uint(256-Difficulty)) //dich bit 238 laanf
+	target.Lsh(target, uint(256-Difficulty))
 
 	pow := &ProofOfWork{b, target}
 
@@ -66,7 +61,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 		data := pow.InitData(nonce)
 		hash = sha256.Sum256(data)
 
-		fmt.Printf("\r	%x", hash)
+		fmt.Printf("\r%x", hash)
 		intHash.SetBytes(hash[:])
 
 		if intHash.Cmp(pow.Target) == -1 {
@@ -99,5 +94,6 @@ func ToHex(num int64) []byte {
 		log.Panic(err)
 
 	}
+
 	return buff.Bytes()
 }
