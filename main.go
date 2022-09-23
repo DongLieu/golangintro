@@ -21,7 +21,7 @@ func (cli *CommandLine) printUsage() {
 }
 
 func (cli *CommandLine) validateArgs() {
-	if len(os.Args) < 2 {
+	if len(os.Args) < 2 { // neu k them print hoac add thi se hien thi huong dan va thoat
 		cli.printUsage()
 		runtime.Goexit()
 	}
@@ -57,9 +57,10 @@ func (cli *CommandLine) run() {
 	addBlockCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	printChainCmd := flag.NewFlagSet("print", flag.ExitOnError)
 	addBlockData := addBlockCmd.String("block", "", "Block data")
-
-	switch os.Args[1] {
+	// fmt.Println(os.Args[2:])
+	switch os.Args[1] { // os.Args[1] = add, print
 	case "add":
+		// fmt.Println(os.Args[2:])
 		err := addBlockCmd.Parse(os.Args[2:])
 		blockchain.Handle(err)
 
@@ -86,7 +87,7 @@ func (cli *CommandLine) run() {
 
 func main() {
 	defer os.Exit(0)
-	chain := blockchain.InitBlockChain()
+	chain := blockchain.InitBlockChain() //lasthask+db
 	defer chain.Database.Close()
 
 	cli := CommandLine{chain}
