@@ -89,7 +89,7 @@ func (chain *BlockChain) AddBlock(data string) {
 	Handle(err)
 }
 
-func (chain *BlockChain) Iterator() *BlockChainIterator {
+func (chain *BlockChain) Iterator() *BlockChainIterator { //tra ve lasthash va db
 	iter := &BlockChainIterator{chain.LastHash, chain.Database}
 
 	return iter
@@ -99,7 +99,7 @@ func (iter *BlockChainIterator) Next() *Block {
 	var block *Block
 
 	err := iter.Database.View(func(txn *badger.Txn) error {
-		item, err := txn.Get(iter.CurrentHash)
+		item, err := txn.Get(iter.CurrentHash) //lay ra lashhash va err
 		Handle(err)
 		encodedBlock, err := item.Value()
 		block = Deserialize(encodedBlock)

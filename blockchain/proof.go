@@ -25,19 +25,19 @@ const Difficulty = 18
 
 type ProofOfWork struct {
 	Block  *Block
-	Target *big.Int
+	Target *big.Int //co dinh neu Dif co dinh(la hang r) nen k phai luu j vao db ca
 }
 
 func NewProof(b *Block) *ProofOfWork {
 	target := big.NewInt(1)
-	target.Lsh(target, uint(256-Difficulty))
+	target.Lsh(target, uint(256-Difficulty)) //phu thuoc vao Dif
 
 	pow := &ProofOfWork{b, target}
 
 	return pow
 }
 
-func (pow *ProofOfWork) InitData(nonce int) []byte {
+func (pow *ProofOfWork) InitData(nonce int) []byte { // gom het lai thanh gia tri bam
 	data := bytes.Join(
 		[][]byte{
 			pow.Block.PrevHash,
@@ -76,7 +76,11 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	return nonce, hash[:]
 }
 
-func (pow *ProofOfWork) Validate() bool {
+func (pow *ProofOfWork) Validate() bool { // tao ra hash tu prevhash.. va so sanh voi target
+	/*
+		van phai bam lai, vi neu nhu bam voi gia tri Dif khac se ra kq khac.
+		vi du nhu gia tri target lon thi return la true nhung hash se bi khac nhau
+	*/
 	var intHash big.Int
 
 	data := pow.InitData(pow.Block.Nonce)
@@ -84,7 +88,7 @@ func (pow *ProofOfWork) Validate() bool {
 	hash := sha256.Sum256(data)
 	intHash.SetBytes(hash[:])
 
-	return intHash.Cmp(pow.Target) == -1
+	return intHash.Cmp(pow.Target) == -1 //true neu inthash<target
 }
 
 func ToHex(num int64) []byte {

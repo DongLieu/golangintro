@@ -33,15 +33,15 @@ func (cli *CommandLine) addBlock(data string) {
 }
 
 func (cli *CommandLine) printChain() {
-	iter := cli.blockchain.Iterator()
+	iter := cli.blockchain.Iterator() // tra ve lash hash va db o moi thoi diem
 
 	for {
-		block := iter.Next()
+		block := iter.Next() // thoi diem sau
 
 		fmt.Printf("Hash: %x\n", block.Hash)
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("pre.Hash: %x\n", block.PrevHash)
-		pow := blockchain.NewProof(block)
+		pow := blockchain.NewProof(block) // PoW :block, tager
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 
@@ -56,12 +56,10 @@ func (cli *CommandLine) run() {
 
 	addBlockCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	printChainCmd := flag.NewFlagSet("print", flag.ExitOnError)
-	addBlockData := addBlockCmd.String("block", "", "Block data")
-	// fmt.Println(os.Args[2:])
-	switch os.Args[1] { // os.Args[1] = add, print
+	addBlockData := addBlockCmd.String("block", "", "Block data") //tra ve dia chi string data, neu ko co mac dinh la ""
+	switch os.Args[1] {                                           // os.Args[1] = add, print
 	case "add":
-		// fmt.Println(os.Args[2:])
-		err := addBlockCmd.Parse(os.Args[2:])
+		err := addBlockCmd.Parse(os.Args[2:]) // os.Args[2:] = -block data
 		blockchain.Handle(err)
 
 	case "print":
@@ -73,14 +71,14 @@ func (cli *CommandLine) run() {
 		runtime.Goexit()
 	}
 
-	if addBlockCmd.Parsed() {
-		if *addBlockData == "" {
+	if addBlockCmd.Parsed() { //true neu Parse da duoc goi
+		if *addBlockData == "" { //neu ko co data thi lai defau
 			addBlockCmd.Usage()
 			runtime.Goexit()
 		}
 		cli.addBlock(*addBlockData)
 	}
-	if printChainCmd.Parsed() {
+	if printChainCmd.Parsed() { //true neu Parse da duoc goi
 		cli.printChain()
 	}
 }
