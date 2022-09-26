@@ -32,7 +32,7 @@ func (b *Block) Serialize() []byte {
 	var res bytes.Buffer
 	encoder := gob.NewEncoder(&res)
 
-	err := encoder.Encode(b)
+	err := encoder.Encode(b) // goi den phuong thuc nay se encode block
 
 	Handle(err)
 
